@@ -18,10 +18,13 @@ Node* genealogicalTree(){
 }
 
 int main() {
-    string line;
-    while(cin) {
-        getline(cin, line);
+    int v1, v2, vertices, edges, target1, target2;
+    scanf("%d %d\n", &target1, &target2);
+    scanf("%d %d\n", &vertices, &edges);
 
+    while(vertices-- > 0) {
+        scanf("%d %d\n", &v1, &v2);
     }
+    return 0;
     return 0;
 }
