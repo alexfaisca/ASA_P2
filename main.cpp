@@ -4,7 +4,7 @@
 using namespace std;
 
 
-void mark_parent_nodes(vector< vector<int> > graph_transpose, vector<int> node_markings, int mark, int max_mark);
+void mark_parent_nodes(vector< vector<int> > *graph_transpose, vector<int> *node_markings, int mark, int max_mark);
 
 
 int main() {
