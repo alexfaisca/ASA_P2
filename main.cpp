@@ -4,9 +4,13 @@
 using namespace std;
 
 int mark_parent_nodes(vector< vector<int> > *graph_transpose, vector<int> *node_markings, int node, int mark, int max_mark, int new_edges){
+    // Avoid loops
     if(new_edges < 0) return -1;
+
+    if((*node_markings)[node - 1] == mark)
+        (*node_markings)[node - 1] = max_mark;
     for(int parent : (*graph_transpose)[node-1]){
-        if((*node_markings)[parent-1] == mark) { (*node_markings)[parent - 1] = max_mark; }
+
         if(mark_parent_nodes(graph_transpose, node_markings, parent, mark, max_mark, new_edges - 1) == -1)
             return -1;
     }
@@ -41,8 +45,8 @@ int main() {
 
     for(int i = 0; i < static_cast<int>(node_markings.size()); i++)
         if(node_markings[i] == 2)
-            mark_parent_nodes(&graph_transpose, &node_markings, i + 1, 2, 1, edges);
-
+            for(int parent : graph_transpose[i])
+                mark_parent_nodes(&graph_transpose, &node_markings, parent, 2, 1, edges);
     for(int i = 0; i < static_cast<int>(node_markings.size()); i++) {
         if(node_markings[i] == 2) {
             cout << i+1 << " ";
@@ -54,7 +58,3 @@ int main() {
     cout << endl;
     return 0;
 }
-
-
-
-
