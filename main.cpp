@@ -18,35 +18,31 @@ int mark_parent_nodes(vector< vector<int> > *graph_transpose, vector<int> *node_
 }
 
 int main() {
-    int target1, target2, vertices, edges, v1, v2;
+    int target1, target2, vertices, expected_edges, edges, v1, v2;
     scanf("%d %d", &target1, &target2);
-    scanf("%d %d", &vertices, &edges);
+    scanf("%d %d", &vertices, &expected_edges);
     vector< vector<int> > graph_transpose(vertices);
     vector<int> node_markings(vertices,0);
     bool output = false, valid_graph = true;
 
-    for(int i = edges; i != 0; i--) {
-        if(scanf("%d %d", &v1, &v2) == EOF) {
-            valid_graph = false;
-            break;
-        }
+    for(edges = 0; scanf("%d %d", &v1, &v2) != EOF; edges++) {
         graph_transpose[v2-1].push_back(v1);
-        if(graph_transpose[v2-1].size() > 2) {
+        if(graph_transpose[v2-1].size() > 2 || edges > expected_edges) {
             valid_graph = false;
             break;
         }
     }
-
-    if(!valid_graph || mark_parent_nodes(&graph_transpose, &node_markings, target1, 0, 1, edges) == -1 ||
-    mark_parent_nodes(&graph_transpose, &node_markings, target2, 1, 2, edges) == -1) {
+    if(edges < expected_edges) valid_graph = false;
+    if(!valid_graph || mark_parent_nodes(&graph_transpose, &node_markings, target1, 0, 1, expected_edges) == -1 ||
+       mark_parent_nodes(&graph_transpose, &node_markings, target2, 1, 2, expected_edges) == -1) {
         cout << "0" << endl;
         return 0;
     }
 
-    for(int i = 0; i < static_cast<int>(node_markings.size()); i++)
+    for(int i = 1; i < static_cast<int>(node_markings.size()); i++)
         if(node_markings[i] == 2)
             for(int parent : graph_transpose[i])
-                mark_parent_nodes(&graph_transpose, &node_markings, parent, 2, 1, edges);
+                mark_parent_nodes(&graph_transpose, &node_markings, parent, 2, 1, expected_edges);
     for(int i = 0; i < static_cast<int>(node_markings.size()); i++) {
         if(node_markings[i] == 2) {
             cout << i+1 << " ";
