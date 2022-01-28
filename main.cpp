@@ -2,6 +2,7 @@
 #include <vector>
 
 using namespace std;
+using namespace std::chrono;
 
 int mark_parent_nodes(vector< vector<int> > *graph_transpose, vector<int> *node_markings, int node, int mark, int max_mark, int new_edges){
     // Avoid loops
@@ -19,7 +20,7 @@ int mark_parent_nodes(vector< vector<int> > *graph_transpose, vector<int> *node_
 
 bool is_cyclic_aux(vector<vector<int>> *graph_transpose, int v, bool visited[], bool stack[])
 {
-    if(visited[v-1] == false) {
+    if(!visited[v - 1]) {
         visited[v-1] = true;
         stack[v-1] = true;
         for(int parent : (*graph_transpose)[v-1]) {
@@ -51,6 +52,7 @@ bool check_for_cycles(vector<vector<int>> *graph_transpose, int v)
 }
 
 int main() {
+    auto start = high_resolution_clock::now();
     int target1, target2, vertices, expected_edges, edges, v1, v2;
     scanf("%d %d", &target1, &target2);
     scanf("%d %d", &vertices, &expected_edges);
@@ -72,7 +74,11 @@ int main() {
 
     if(!valid_graph || mark_parent_nodes(&graph_transpose, &node_markings, target1, 0, 1, expected_edges) == -1 ||
        mark_parent_nodes(&graph_transpose, &node_markings, target2, 1, 2, expected_edges) == -1) {
-        cout << "0" << endl;
+        cout << endl;
+        auto end = high_resolution_clock::now();
+        auto duration = duration_cast<microseconds>(end - start);
+        cout << "\nEdges + Vertices: "
+             << (edges + vertices)<< ". Time taken: " << duration.count() << " ms." << endl;
         return 0;
     }
 
@@ -90,5 +96,9 @@ int main() {
 
     if(!output) cout << "-";
     cout << endl;
+    auto end = high_resolution_clock::now();
+    auto duration = duration_cast<microseconds>(end - start);
+    cout << "\nEdges + Vertices: "
+         << (edges + vertices)<< ". Time taken: " << duration.count() << " ms." << endl;
     return 0;
 }
